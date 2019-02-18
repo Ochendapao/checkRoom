@@ -180,6 +180,8 @@ public class ChatServerView extends Frame {
 
                 textArea.append(name + password);
 
+                socket.close();
+
             }
 
 
@@ -196,7 +198,28 @@ public class ChatServerView extends Frame {
                arrayListUser.forEach(item -> {
 
                    if (userlog.name.equals(((user)item).name) && userlog.password.equals(((user)item).password) ){
-                       System.out.println("into if");
+
+                       BufferedWriter bufferedWriter = null;
+                       try {
+                           bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                       }
+
+                       String sucLog = "恭喜你，登录成啦";
+
+                       try {
+                           bufferedWriter.write(sucLog + "\n");
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                       }
+
+                       try {
+                           bufferedWriter.flush();
+                       } catch (IOException e) {
+                           e.printStackTrace();
+                       }
+
 
                    }
                });
@@ -209,90 +232,15 @@ public class ChatServerView extends Frame {
 
 
 
+            if (!socket.isClosed()){
+
+                serversThread serversThread = new serversThread(socket);
 
 
+                new Thread(serversThread).start();
+            }
 
 
-//
-////                if (arrayListUser.forEach(user -> {})) {
-//
-//                    System.out.println("into if");
-//
-//                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-//
-//                    String sucLog = "恭喜你，登录成啦";
-//
-//                    bufferedWriter.write(sucLog + "\n");
-//
-//                    bufferedWriter.flush();
-//
-//                }
-//                else {
-//
-//                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-//
-//                    String failLog = "再见！fake！";
-//
-//                    bufferedWriter.write(failLog);
-//
-//                    bufferedWriter.flush();
-//
-//                    socket.close();
-//
-//                }
-
-
-
-
-
-//            name = reader.readLine();
-//
-//            password = reader.readLine();
-//
-//            storeUsers(name,password);
-//
-//            textArea.append(name + password);
-//
-//
-//            //log on
-//            BufferedReader reader1 = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//
-//            String nameLog;
-//
-//            String passwordLog;
-//
-//            nameLog = reader1.readLine();
-//
-//            passwordLog = reader1.readLine();
-//
-//            user user = new user(nameLog,passwordLog);
-
-//
-//            if (arrayListUser.contains(user)) {
-//
-//                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-//
-//                String sucLog = "恭喜你，登录成啦";
-//
-//                bufferedWriter.write(sucLog);
-//
-//                bufferedWriter.flush();
-//
-//
-//
-//            }
-//
-//this.addWindowListener(new java.awt.event.WindowAdapter() {
-//public void windowClosing(java.awt.event.WindowEvent e) {
-//System.exit(0);
-//}
-
-
-
-            serversThread serversThread = new serversThread(socket);
-
-
-            new Thread(serversThread).start();
 
         }
     }

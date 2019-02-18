@@ -15,34 +15,27 @@ public class ChatClientView extends Frame {
 
     private TextArea textArea = new TextArea(250,500);
 
-    private Panel clientPanel = new Panel();
 
     private Panel clientPanelSent = new Panel();
 
-    private Label labelAddress = new Label("Address:");
-
-    private Label labelPort = new Label("port:");
-
-    private Label labelName = new Label("name:");
-
-    private TextField textAdd = new TextField(10);
-
-    private TextField textPort = new TextField(5);
-
-    private TextField textName = new TextField(5);
 
     private TextField textContent = new TextField(30);
 
-    private Button buttonConnect = new Button("connect");
 
     private Button buttonSend = new Button("send");
 
     private Socket socket;
 
 
-    public ChatClientView(String title) throws IOException {
+
+
+
+
+
+    public ChatClientView(String title, Socket socket1) throws IOException {
         super(title);
         init();
+        socket = socket1;
     }
 
 
@@ -51,20 +44,10 @@ public class ChatClientView extends Frame {
 
     private void init() {
         this.buttonSend.addActionListener(new sendListener());
-//        this.clientPanel.setBounds(0,0,250,500);
-//        this.clientPanel.setBackground(Color.green);
-//        this.clientPanelSent.setBackground(Color.blue);
-        this.buttonConnect.addActionListener(new connectListener());
+
         this.add(textArea);
-        this.add(clientPanel, BorderLayout.NORTH);
+
         this.add(clientPanelSent, BorderLayout.SOUTH);
-        clientPanel.add(labelAddress);
-        clientPanel.add(textAdd);
-        clientPanel.add(labelPort);
-        clientPanel.add(textPort);
-        clientPanel.add(labelName);
-        clientPanel.add(textName);
-        clientPanel.add(buttonConnect);
         clientPanelSent.add(textContent);
         clientPanelSent.add(buttonSend);
         this.pack();
@@ -80,35 +63,6 @@ public class ChatClientView extends Frame {
 
 
 
-    class connectListener implements ActionListener {
-
-
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            String host = textAdd.getText();
-
-            try {
-                socket = new Socket(host,222);
-
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-
-                writer.write(textName.getText()+"\n");
-
-                writer.flush();
-
-                sbThread sbThread = new sbThread(socket);
-
-                new Thread(sbThread).start();
-
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-
-        }
-    }
 
 
 
@@ -123,13 +77,14 @@ public class ChatClientView extends Frame {
 
                 String textsend = textContent.getText() +"\n";
 
-//                textArea.append(textsend);
 
                 textContent.setText(null);
 
                 writer.write(textsend);
 
                 writer.flush();
+
+                textArea.append(textsend);
 
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -171,15 +126,3 @@ public class ChatClientView extends Frame {
 
 
 
-
-//
-//    public static void main(String[] args) throws IOException {
-//
-////        ChatClientView chatClientView = new ChatClientView("Client");
-////
-////
-////
-////        ChatClientView chatClientView1 = new ChatClientView("mine");
-//
-//    }
-//}

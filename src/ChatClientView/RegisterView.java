@@ -9,8 +9,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import javax.swing.*;
 
-public class RegisterView extends Frame {
+public class RegisterView extends JFrame {
 
 
     private Label labelName = new Label("Name");
@@ -67,8 +68,20 @@ public class RegisterView extends Frame {
         this.buttonRegister.addActionListener(new registerListener());
 
 //        this.setVisible(true);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
     }
+
+
+    public void closeWindowSon() {
+
+        this.dispose();
+
+
+
+    }
+
+
 
 
     class registerListener implements ActionListener {
@@ -95,9 +108,15 @@ public class RegisterView extends Frame {
             }
 
 
+            closeWindowSon();
 
         }
 
     }
+
+    public static void main(String[] args) {
+        RegisterView registerView = new RegisterView();
+    }
 }
+
 

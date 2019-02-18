@@ -92,7 +92,7 @@ public class LogonView extends Frame {
 
                 if (suclog.equals("恭喜你，登录成啦")) {
 
-                    ChatClientView chatClientView = new ChatClientView(name);
+                    ChatClientView chatClientView = new ChatClientView(name,socket);
 
                 }
 
