@@ -19,6 +19,9 @@ public class ChatServerView extends Frame {
 
     private ArrayList arrayListUser = new ArrayList<user>();
 
+    private String nameClient;
+
+
 
     public ChatServerView(String title) {
 
@@ -59,6 +62,8 @@ public class ChatServerView extends Frame {
         for (String key: set)  {
             Socket socket = (Socket) hashMap.get(key);
 
+//            System.out.println(key);
+
             try {
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
@@ -95,20 +100,12 @@ public class ChatServerView extends Frame {
 
         public String clientName;
 
-        public serversThread(Socket socket) {
+        public serversThread(Socket socket, String clientName) {
 
             this.socket = socket;
 
-            try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.clientName = clientName;
 
-                clientName = reader.readLine();
-
-                hashMap.put(clientName,socket);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
         }
 
@@ -190,14 +187,21 @@ public class ChatServerView extends Frame {
 
                 name = reader.readLine();
 
+                nameClient = name;
+
                 password = reader.readLine();
 
                 user userlog = new user(name, password);
 
 
-               arrayListUser.forEach(item -> {
+                String finalName = name;
+                arrayListUser.forEach(item -> {
 
                    if (userlog.name.equals(((user)item).name) && userlog.password.equals(((user)item).password) ){
+
+
+                       hashMap.put(finalName,socket);
+
 
                        BufferedWriter bufferedWriter = null;
                        try {
@@ -234,7 +238,7 @@ public class ChatServerView extends Frame {
 
             if (!socket.isClosed()){
 
-                serversThread serversThread = new serversThread(socket);
+                serversThread serversThread = new serversThread(socket,nameClient);
 
 
                 new Thread(serversThread).start();

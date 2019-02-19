@@ -26,6 +26,8 @@ public class ChatClientView extends Frame {
 
     private Socket socket;
 
+    private String clientName;
+
 
 
 
@@ -33,9 +35,22 @@ public class ChatClientView extends Frame {
 
 
     public ChatClientView(String title, Socket socket1) throws IOException {
+
+
+
         super(title);
+
+        this.setSize(700,700);
+
         init();
+
         socket = socket1;
+
+        clientName = title;
+
+        sbThread sbThread = new sbThread(socket);
+
+        new Thread(sbThread).start();
     }
 
 
@@ -84,7 +99,7 @@ public class ChatClientView extends Frame {
 
                 writer.flush();
 
-                textArea.append(textsend);
+//                textArea.append(clientName + ":" + textsend);
 
             } catch (IOException e1) {
                 e1.printStackTrace();
